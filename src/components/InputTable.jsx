@@ -1,6 +1,12 @@
-import React from 'react';
+import React from "react";
 
-function InputTable({ processes, setProcesses, algorithm }) {
+function InputTable({
+  processes,
+  setProcesses,
+  algorithm,
+  pidCounter,
+  setPidCounter,
+}) {
   const handleChange = (index, field, value) => {
     const updated = [...processes];
     updated[index][field] = parseInt(value);
@@ -8,8 +14,18 @@ function InputTable({ processes, setProcesses, algorithm }) {
   };
 
   const addProcess = () => {
-    const newPID = `P${processes.length + 1}`;
-    setProcesses([...processes, { pid: newPID, arrivalTime: 0, burstTime: 1, priority: 1 }]);
+    const existingPIDs = processes.map((p) => parseInt(p.pid.replace("P", "")));
+    let newPidNum = 1;
+    while (existingPIDs.includes(newPidNum)) {
+      newPidNum++;
+    }
+
+    const newPID = `P${newPidNum}`;
+
+    setProcesses([
+      ...processes,
+      { pid: newPID, arrivalTime: "", burstTime: "", priority: "" },
+    ]);
   };
 
   const deleteProcess = (index) => {
@@ -25,7 +41,7 @@ function InputTable({ processes, setProcesses, algorithm }) {
             <th>PID</th>
             <th>Arrival Time</th>
             <th>Burst Time</th>
-            {algorithm === 'Priority' && <th>Priority</th>}
+            {algorithm === "PRIORITY" && <th>Priority</th>}
             <th>Action</th>
           </tr>
         </thead>
@@ -36,34 +52,51 @@ function InputTable({ processes, setProcesses, algorithm }) {
               <td>
                 <input
                   type="number"
+                  min="0"
                   value={p.arrivalTime}
-                  onChange={(e) => handleChange(index, 'arrivalTime', e.target.value)}
+                  onChange={(e) =>
+                    handleChange(index, "arrivalTime", e.target.value)
+                  }
                 />
               </td>
               <td>
                 <input
                   type="number"
+                  min="0"
                   value={p.burstTime}
-                  onChange={(e) => handleChange(index, 'burstTime', e.target.value)}
+                  onChange={(e) =>
+                    handleChange(index, "burstTime", e.target.value)
+                  }
                 />
               </td>
-              {algorithm === 'Priority' && (
+              {algorithm === "PRIORITY" && (
                 <td>
                   <input
                     type="number"
+                    min="0"
                     value={p.priority}
-                    onChange={(e) => handleChange(index, 'priority', e.target.value)}
+                    onChange={(e) =>
+                      handleChange(index, "priority", e.target.value)
+                    }
                   />
                 </td>
               )}
               <td>
-                <button onClick={() => deleteProcess(index)}>Delete</button>
+                <button onClick={() => deleteProcess(index)} className="delete">
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-      <button onClick={addProcess} className='add-process'>Add Process</button>
+      <button
+        onClick={addProcess}
+        disabled={processes.length >= 9}
+        className="add-process"
+      >
+        Add Process
+      </button>
     </div>
   );
 }

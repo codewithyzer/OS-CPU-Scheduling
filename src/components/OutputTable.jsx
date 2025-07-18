@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 function OutputTable({ results }) {
   const avgWT = results.reduce((acc, p) => acc + p.wt, 0) / results.length;
@@ -6,7 +6,7 @@ function OutputTable({ results }) {
 
   return (
     <div>
-      <h3 className='results'>Results</h3>
+      <h3 className="results">Results</h3>
       <table>
         <thead>
           <tr>
@@ -16,7 +16,7 @@ function OutputTable({ results }) {
           </tr>
         </thead>
         <tbody>
-          {results.map(p => (
+          {results.map((p) => (
             <tr key={p.pid}>
               <td>{p.pid}</td>
               <td>{p.wt}</td>
@@ -25,8 +25,8 @@ function OutputTable({ results }) {
           ))}
         </tbody>
       </table>
-      <p className='awt'>Average WT: {avgWT.toFixed(2)}</p>
-      <p className='atat'>Average TAT: {avgTAT.toFixed(2)}</p>
+      <p className="awt">Average WT: {avgWT.toFixed(2)}</p>
+      <p className="atat">Average TAT: {avgTAT.toFixed(2)}</p>
     </div>
   );
 }
